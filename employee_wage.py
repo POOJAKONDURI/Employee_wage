@@ -17,5 +17,5 @@ class Employee:
         else:
             return f"{self.name} is absent"
 
-part_time = Employee("john",8,20,is_part_time=True)
+part_time = Employee("abram",8,20,is_part_time=True)
 print(part_time.attendance_check())
