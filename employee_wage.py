@@ -11,11 +11,13 @@ class Employee:
     def attendance_check(self):
         attendance = random.randint(0,1)
         if attendance == 1:
-            work_hours = 8 if self.is_part_time else self.total_hours
+            work_hours = 4 if self.is_part_time else self.total_hours
             daily_wage = self.wage_per_hour * work_hours
             return f"{self.name} is present and {daily_wage} is daily wage"
         else:
             return f"{self.name} is absent"
 
-part_time = Employee("abram",8,20,is_part_time=True)
+part_time = Employee("abram",20,8,is_part_time=True)
+
 print(part_time.attendance_check())
+
