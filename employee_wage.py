@@ -1,4 +1,3 @@
-
 import random
 
 class Employee:
@@ -66,58 +65,58 @@ class Employee:
         print(f"Total working days: {total_working_days} days.")
         return total_wage
 
-    def process_choice(self, choice,company_name, wage_per_hour, full_day_hours, part_time_hours, working_days, max_working_hours, max_working_days):
+class EmpWageBuilder:
+    def __init__(self, company_name, wage_per_hour, full_day_hours, part_time_hours, working_days, max_working_hours, max_working_days):
+        self.company_name = company_name
+        self.wage_per_hour = wage_per_hour
+        self.full_day_hours = full_day_hours
+        self.part_time_hours = part_time_hours
+        self.working_days = working_days
+        self.max_working_hours = max_working_hours
+        self.max_working_days = max_working_days
+        self.total_wage = 0
+
+    def add_total_wage(self, wage):
+        self.total_wage += wage
+
+    def display_total_wage(self):
+        print(f"Total wage for {self.company_name}: {self.total_wage} rupees.")
+
+    def process_choice(self, employee, choice):
         match choice:
             case 1:
-                print(f"{self.name} is {'Present' if self.attendance_check() == 1 else 'Absent'}.")
+                print(f"{employee.name} is {'Present' if employee.attendance_check() == 1 else 'Absent'}.")
             case 2:
-                if self.attendance_check() == 1:
-                    full_day_wage = self.calculate_full_day_wage(wage_per_hour, full_day_hours)
-                    print(f"{self.name} is Present. Full-time wage: {full_day_wage} rupees.")
+                if employee.attendance_check() == 1:
+                    full_day_wage = employee.calculate_full_day_wage(self.wage_per_hour, self.full_day_hours)
+                    print(f"{employee.name} is Present. Full-time wage: {full_day_wage} rupees.")
                 else:
-                    print(f"{self.name} is Absent. No wage today.")
+                    print(f"{employee.name} is Absent. No wage today.")
             case 3:
-                if self.attendance_check() == 1:
-                    part_time_wage = self.calculate_part_time_wage(wage_per_hour, part_time_hours)
-                    print(f"{self.name} is Present. Part-time wage: {part_time_wage} rupees.")
+                if employee.attendance_check() == 1:
+                    part_time_wage = employee.calculate_part_time_wage(self.wage_per_hour, self.part_time_hours)
+                    print(f"{employee.name} is Present. Part-time wage: {part_time_wage} rupees.")
                 else:
-                    print(f"{self.name} is Absent. No wage today.")
+                    print(f"{employee.name} is Absent. No wage today.")
             case 4:
                 is_part_time = input("Is this a part-time employee? (y/n): ").lower() == 'y'
-                total_wage = self.calculate_monthly_wage(wage_per_hour, full_day_hours, part_time_hours, working_days, is_part_time)
+                total_wage = employee.calculate_monthly_wage(self.wage_per_hour, self.full_day_hours, self.part_time_hours, self.working_days, is_part_time)
+                self.add_total_wage(total_wage)
                 print(f"\nTotal wage for the month: {total_wage} rupees.")
             case 5:
                 is_part_time = input("Is this a part-time employee? (y/n): ").lower() == 'y'
-                total_wage = self.calculate_wages_for_month_until(wage_per_hour, full_day_hours, part_time_hours, max_working_hours, max_working_days, is_part_time)
-                print(f"\nTotal wage for the month until limit is: {total_wage} rupees.")
+                total_wage = employee.calculate_wages_for_month_until(self.wage_per_hour, self.full_day_hours, self.part_time_hours, self.max_working_hours, self.max_working_days, is_part_time)
+                self.add_total_wage(total_wage)
+                print(f"\nTotal wage until limit: {total_wage} rupees.")
             case _:
                 print("Invalid choice! Please select a valid option.")
 
 def main():
-
-    # Collect company-specific details
+    employee1 = Employee("Charan")
+    employee2 = Employee("Ram")
     
-    A_company_name = 'microsoft'
-    A_wage_per_hour = 20
-    A_full_day_hours = 8
-    A_part_time_hours = 4
-    A_working_days = 20
-    A_max_working_hours = 100
-    A_max_working_days = 20
-    employee1 = Employee("charan") 
-    
-
-    B_company_name = 'google'
-    B_wage_per_hour = 30
-    B_full_day_hours = 8
-    B_part_time_hours = 4
-    B_working_days = 22
-    B_max_working_hours = 100
-    B_max_working_days = 20
-    employee2 = Employee("ram") 
-    
-
-
+    microsoft = EmpWageBuilder('Microsoft', 20, 8, 4, 20, 100, 20)
+    google = EmpWageBuilder('Google', 30, 8, 4, 22, 100, 20)
 
     while True:
         print("""
@@ -132,17 +131,17 @@ def main():
         choice = input("Enter your choice (1-5): ")
         if choice.isdigit():
             choice = int(choice)
-            company_name = input("enter company name: ").strip()
-            if company_name.lower() == "microsoft":
-                employee1.process_choice(choice,A_company_name,A_wage_per_hour,A_full_day_hours,A_part_time_hours,A_working_days,A_max_working_hours,A_max_working_days)
-            elif company_name.lower() == "google": 
-                employee2.process_choice(choice,B_company_name,B_wage_per_hour,B_full_day_hours,B_part_time_hours,B_working_days,B_max_working_hours,B_max_working_days) 
+            company_name = input("Enter company name: ").strip().lower()
+            if company_name == "microsoft":
+                microsoft.process_choice(employee1, choice)
+                microsoft.display_total_wage()
+            elif company_name == "google":
+                google.process_choice(employee2, choice)
+                google.display_total_wage()
             else:
-                print("invalid")
-
+                print("Invalid company name.")
         else:
             print("Invalid input. Please enter a valid number.")
 
 if __name__ == '__main__':
     main()
-
