@@ -1,11 +1,12 @@
 import random
 
 class Employee:
-    def __init__(self, name, wage_per_hour=20, full_day_hours=8, part_time_hours=4, max_working_hours=100, max_working_days=20):
+    def __init__(self, name, wage_per_hour=20, full_day_hours=8, part_time_hours=4,working_days=20, max_working_hours=100, max_working_days=20):
         self.name = name
         self.wage_per_hour = wage_per_hour
         self.full_day_hours = full_day_hours
         self.part_time_hours = part_time_hours
+        self.working_days = working_days
         self.max_working_hours = max_working_hours
         self.max_working_days = max_working_days
 
@@ -21,9 +22,29 @@ class Employee:
     # UC3: Calculate Part-Time Wage
     def calculate_part_time_wage(self):
         return self.wage_per_hour * self.part_time_hours
+    
+    #UC5: Calculate Monthly wage
+    def calculate_monthly_wage(self, is_part_time=False):
+        total_wage = 0
+        for day in range(1, self.working_days + 1):
+            attendance = self.attendance_check()
+            if attendance == 1:
+                if is_part_time:
+                    daily_wage = self.calculate_part_time_wage()
+                    total_wage += daily_wage
+                    print(f"Day {day}: {self.name} is Present (Part-Time). Wage: {daily_wage} rupees.")
+                else:
+                    daily_wage = self.calculate_full_day_wage()
+                    total_wage += daily_wage
+                    print(f"Day {day}: {self.name} is Present (Full-Time). Wage: {daily_wage} rupees.")
+            else:
+                print(f"Day {day}: {self.name} is Absent. Wage: 0 rupees.")
+        return total_wage
+    
+    
 
     # UC6: Calculate wages until the total working hours or days condition is reached
-    def calculate_wages_for_month(self, is_part_time=False):
+    def calculate_wages_for_month_untill(self, is_part_time=False):
         total_working_hours = 0
         total_working_days = 0
         total_wage = 0
@@ -68,10 +89,16 @@ class Employee:
                     print(f"{self.name} is Present. Part-time wage: {part_time_wage} rupees.")
                 else:
                     print(f"{self.name} is Absent. No wage today.")
-            case 4:  
+            case 4:
+                 is_part_time = input("Is this a part-time employee? (y/n): ").lower() == 'y'
+                 total_wage = self.calculate_monthly_wage(is_part_time)
+                 print(f"\nTotal wage for the month: {total_wage} rupees.")
+
+            case 5:  
                 is_part_time = input("Is this a part-time employee? (y/n): ").lower() == 'y'
-                total_wage = self.calculate_wages_for_month(is_part_time)
-                print(f"\nTotal wage for the month: {total_wage} rupees.")
+                total_wage = self.calculate_wages_for_month_untill(is_part_time)
+                print(f"\nTotal wage for the month untill limit is: {total_wage} rupees.")
+
             case _:
                 print("Invalid choice! Please select a valid option.")
 
@@ -85,16 +112,18 @@ def main():
         1. Check Employee Attendance
         2. Calculate Full-Time Employee Wage
         3. Calculate Part-Time Employee Wage
-        4. Calculate Wages Until Total Hours or Days Reached
+        4. Calculate wages for a month      
+        5. Calculate Wages Until Total Hours or Days Reached
         """)
         
-        choice = input("Enter your choice (1-4): ")
+        choice = input("Enter your choice (1-5): ")
         if choice.isdigit():
             choice = int(choice)
             employee.process_choice(choice)
+            break
         else:
             print("Invalid input. Please enter a valid number.")
-            continue
+
 
 if __name__ == '__main__':
     main()
