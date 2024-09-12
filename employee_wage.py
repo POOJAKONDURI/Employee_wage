@@ -14,6 +14,10 @@ class Employee:
             return f"{self.name} is present and {daily_wage} is daily wage"
         else:
             return f"{self.name} is absent"
+        
+def main():
+    employe1 = Employee("john",8,20)
+    print(employe1.attendance_check())
 
-employe1 = Employee("john",8,20)
-print(employe1.attendance_check())
+if __name__ == "__main__":
+    main()
