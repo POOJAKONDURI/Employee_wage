@@ -16,8 +16,15 @@ class Employee:
             return f"{self.name} is present and {daily_wage} is daily wage"
         else:
             return f"{self.name} is absent"
+        
+        
+def main():
+    name = input("Enter the Name of Employee: ")
+    is_part_time_input = input("Is the employee part-time? (yes/no): ").strip().lower()
+    is_part_time = True if is_part_time_input == "yes" else False
+    part_time = Employee(name,20,8,is_part_time)
+    print(part_time.attendance_check())
 
-part_time = Employee("abram",20,8,is_part_time=True)
-
-print(part_time.attendance_check())
+if __name__ == "__main__":
+    main()
 
